@@ -19,10 +19,13 @@ thr_sift = 2;
 
 fprintf('Computing the total match...\n');
 [total_matched, total_score] = matched_points(f1, f2, thr_total);
+fprintf('Number of matched points is %d\n', size(total_matched,2));
 
 fprintf('Computing position correct...\n');
 [correct_1, matched_1] = position_correct(d1, d2, total_matched);
+fprintf('Number of correct matched feature in position is %d\n', correct_1);
 
 fprintf('Computing sift correct...\n');
 [correct_2, matched_2] = sift_correct(f1, f2, d1, d2, thr_sift);
+fprintf('Number of correct matched feature under threshold is %d\n', correct_2);
 
