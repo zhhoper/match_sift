@@ -5,8 +5,10 @@ run('~/lib/vlfeat-0.9.20/toolbox/vl_setup');
 addpath('../Data/Selected_Images/00000065/');
 
 % load two images
-I1 = imread('20151101_133309.jpg');
-I2 = imread('20151101_140305.jpg');
+%I1 = imread('20151101_133309.jpg');
+%I2 = imread('20151101_140305.jpg');
+I1 = imread('20151108_153320.jpg');
+I2 = imread('20151109_133322.jpg');
 
 I1 = single(rgb2gray(I1));
 I2 = single(rgb2gray(I2));
