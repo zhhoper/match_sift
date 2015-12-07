@@ -20,7 +20,8 @@ thr_total = sqrt(2);
 thr_sift = 2;
 
 fprintf('Computing the total match...\n');
-[total_matched, total_score] = matched_points(f1, f2, thr_total);
+%[total_matched, total_score] = matched_points(f1, f2, thr_total);
+[total_matched, total_score] = matched_points_DAISY(f1, f2, thr_total);
 fprintf('Number of matched points is %d\n', size(total_matched,2));
 
 fprintf('Computing position correct...\n');
