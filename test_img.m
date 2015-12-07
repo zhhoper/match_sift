@@ -16,7 +16,8 @@ I2 = single(rgb2gray(I2));
 [f1, d1] = vl_sift(I1);
 [f2, d2] = vl_sift(I2);
 
-thr_total = sqrt(2);
+%thr_total = sqrt(2);
+thr_total = 5;
 thr_sift = 2;
 
 fprintf('Computing the total match...\n');
@@ -26,9 +27,9 @@ fprintf('Number of matched points is %d\n', size(total_matched,2));
 
 fprintf('Computing position correct...\n');
 [correct_1, matched_1] = position_correct(d1, d2, total_matched);
-fprintf('Number of correct matched feature in position is %d\n', correct_1);
+fprintf('Number of correct matched feature in position is %d\n', size(correct_1, 2));
 
 fprintf('Computing sift correct...\n');
 [correct_2, matched_2] = sift_correct(f1, f2, d1, d2, thr_sift);
-fprintf('Number of correct matched feature under threshold is %d\n', correct_2);
+fprintf('Number of correct matched feature under threshold is %d\n', size(correct_2, 2));
 

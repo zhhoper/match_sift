@@ -5,14 +5,14 @@ function [total_matched, correct_1, correct_2, sift_matched, f1, f2] = sift_matc
 [f1, d1] = vl_sift(I1);
 [f2, d2] = vl_sift(I2);
 
-thr_total = sqrt(2);
-thr_sift = 2;
+thr_total =5;
+thr_sift = 5;
 
 verbose = 1;
 if verbose == 1
 	fprintf('Computing the total match...\n');
 end
-[total_matched, total_score] = matched_points(f1, f2, thr_total);
+[total_matched, total_score] = matched_points_DAISY(f1, f2, thr_total);
 
 if verbose == 1
 	fprintf('Computing the correct position match...\n');

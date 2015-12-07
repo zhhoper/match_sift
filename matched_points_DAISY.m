@@ -28,22 +28,24 @@ num_2 = size(f2, 2);
 % compute pair wise distance
 tmp1 = f1(1:2, :);
 tmp2 = f2(1:2, :);
-distance_feature = pdist2(tmp1', tmp2', 'euclidean');
+distance_location = pdist2(tmp1', tmp2', 'euclidean');
 distance_scale = pdist2(f1(3,:)', f2(3,:)', 'euclidean');
 distance_orientation = pdist2(f1(4,:)',f2(4,:)', @angle_distance);
+tmp_ind = distance_orientation > pi;
+distance_orientation(tmp_ind) = distance_orientation(tmp_ind) - pi;
 
 % make sure that the match is unique
 % now we use a stupid way: each time, we find the smallest distance and record the match, then 
 % we remove the matched points
-indicator_distance = distance_feature > thr_location;
+indicator_distance = distance_location > thr_location;
 indicator_scale = distance_scale > thr_scale;
 indicator_orientation = distance_orientation > thr_ori;
 
-distance(indicator_distance & indicator_scale & indicator_orientation) = thr_location + 1;
+distance_location(indicator_distance | indicator_scale | indicator_orientation) = thr_location + 1;
 %distance(distance > thr) = thr + 1;
 
-num_row = sum(sum(distance_location <= thr, 2) > 0);
-num_col = sum(sum(distance_location <= thr, 1) > 0);
+num_row = sum(sum(distance_location <= thr_location, 2) > 0);
+num_col = sum(sum(distance_location <= thr_location, 1) > 0);
 
 % maximum number of matched points
 num = min(num_row, num_col);
@@ -51,18 +53,18 @@ tmp_matched = zeros(2, num);
 tmp_score = -1*ones(1, num);
 
 count = 1;
-min_value = min(min(distance));
-while min_value ~= thr + 1
-	[ind_x, ind_y] = find(distance == min_value);
+min_value = min(min(distance_location));
+while min_value ~= thr_location + 1
+	[ind_x, ind_y] = find(distance_location == min_value);
 	for i = 1 : length(ind_x)
 			tmp_matched(1, count) = ind_x(i);
 			tmp_matched(2, count) = ind_y(i);
 			tmp_score(1, count) = min_value;
 			count = count + 1;
-			distance(ind_x(i), :) = thr_location + 1;
-			distance(:, ind_y(i)) = thr_location + 1;
+			distance_location(ind_x(i), :) = thr_location + 1;
+			distance_location(:, ind_y(i)) = thr_location + 1;
 	end
-	min_value = min(min(distance));
+	min_value = min(min(distance_location));
 end
 
 matched = tmp_matched(1:2, 1:count-1);
@@ -74,9 +76,5 @@ function dist = angle_distance(x,y)
 tx = x + 2*pi*ceil(-x/pi/2);
 ty = y + 2*pi*ceil(-y/pi/2);
 
-tmp = abs(tx - ty);
-if tmp > pi 
-		tmp = tmp - pi;
-end
-dist = tmp;
+dist = abs(tx - ty);
 end
