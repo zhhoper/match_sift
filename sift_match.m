@@ -5,8 +5,11 @@ function [total_matched, correct_1, correct_2, sift_matched, f1, f2] = sift_matc
 [f1, d1] = vl_sift(I1);
 [f2, d2] = vl_sift(I2);
 
-thr_total =5;
+thr_total = 5;
 thr_sift = 5;
+
+thr_scale = 1.2;
+thr_orientation = +inf;
 
 verbose = 1;
 if verbose == 1
