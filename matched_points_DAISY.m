@@ -9,14 +9,20 @@ function [matched, score] = matched_points_DAISY(f1, f2, thr_location, thr_scale
 % matched: 2 X N matrix. N is the number of matched points, first row shows the index in the first image, second row shows the index in the second image 
 
 % setting default value
-scale = 1.6; % default scale of SIFT 
+%scale = 1.6; % default scale of SIFT 
+
+% ----------------------------------------------
+% we use the ratio of scale to test the matching
+% default value if 1.2 (roughtly 1/4 of scale)
+% ----------------------------------------------
+
 switch nargin
 case 2
 		thr_location = 5;
-		thr_scale = 0.25*scale;
+		thr_scale = 1.2;
 		thr_ori = pi/8;
 case 3
-		thr_scale = 0.25*scale;
+		thr_scale = 1.2;
 		thr_ori = pi/8;
 case 4
 		thr_ori = pi/8;
@@ -29,10 +35,13 @@ num_2 = size(f2, 2);
 tmp1 = f1(1:2, :);
 tmp2 = f2(1:2, :);
 distance_location = pdist2(tmp1', tmp2', 'euclidean');
-distance_scale = pdist2(f1(3,:)', f2(3,:)', 'euclidean');
+
+% compute ratio of scale
+tmp_scale_1 = repmat(f1(3,:)', 1, num_2);
+tmp_scale_2 = repmat(f2(3,:), num_1, 1);
+distance_scale = max(tmp_scale_1, tmp_scale_2)./min(tmp_scale_1, tmp_scale_2);
+
 distance_orientation = pdist2(f1(4,:)',f2(4,:)', @angle_distance);
-tmp_ind = distance_orientation > pi;
-distance_orientation(tmp_ind) = distance_orientation(tmp_ind) - pi;
 
 % make sure that the match is unique
 % now we use a stupid way: each time, we find the smallest distance and record the match, then 
@@ -42,7 +51,6 @@ indicator_scale = distance_scale > thr_scale;
 indicator_orientation = distance_orientation > thr_ori;
 
 distance_location(indicator_distance | indicator_scale | indicator_orientation) = thr_location + 1;
-%distance(distance > thr) = thr + 1;
 
 num_row = sum(sum(distance_location <= thr_location, 2) > 0);
 num_col = sum(sum(distance_location <= thr_location, 1) > 0);
@@ -76,5 +84,5 @@ function dist = angle_distance(x,y)
 tx = x + 2*pi*ceil(-x/pi/2);
 ty = y + 2*pi*ceil(-y/pi/2);
 
-dist = abs(tx - ty);
+dist = min(abs(tx - ty), 2*pi - abs(tx-ty));
 end
