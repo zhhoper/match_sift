@@ -23,7 +23,7 @@ for i = 1 : numPairs
 		gI2 = single(rgb2gray(I2));
 
 		% compute the matched information
-		[total_matched, correct_1, correct_2, sift_matched, f1, f2] = sift_match(gI1, gI2);
+		[total_matched, correct_1, correct_2, sift_matched, f1, f2] = sift_match_fix_orientation(gI1, gI2);
 
 		% draw correspondence when mathced features are less than 50
 		if size(correct_1, 2) < 50

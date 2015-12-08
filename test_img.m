@@ -18,11 +18,13 @@ I2 = single(rgb2gray(I2));
 
 %thr_total = sqrt(2);
 thr_total = 5;
-thr_sift = 2;
+thr_sift = 5;
+thr_scale = 1.2;
+thr_orientation = +inf;
 
 fprintf('Computing the total match...\n');
 %[total_matched, total_score] = matched_points(f1, f2, thr_total);
-[total_matched, total_score] = matched_points_DAISY(f1, f2, thr_total);
+[total_matched, total_score] = matched_points_DAISY(f1, f2, thr_total, thr_scale, thr_orientation);
 fprintf('Number of matched points is %d\n', size(total_matched,2));
 
 fprintf('Computing position correct...\n');
