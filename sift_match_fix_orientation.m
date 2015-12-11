@@ -7,6 +7,10 @@ function [total_matched, correct_1, correct_2, sift_matched, f1, f2] = sift_matc
 [tf1, td1] = vl_sift(I1);
 [tf2, td2] = vl_sift(I2);
 
+[~, index_1] = sort(tf1(3,:));
+[~, index_2] = sort(tf2(3,:));
+tf1 = tf1(:, index_1);
+tf2 = tf2(:, index_2);
 % enforce the orientation to be 0
 frame_1 = tf1;
 frame_2 = tf2;
@@ -27,7 +31,8 @@ verbose = 1;
 if verbose == 1
 	fprintf('Computing the total match...\n');
 end
-[total_matched, total_score] = matched_points_DAISY(f1, f2, thr_total);
+%[total_matched, total_score] = matched_points_DAISY_fast(tf1, tf2, thr_total);
+[total_matched, total_score] = matched_points_DAISY_fast(f1, f2, thr_total);
 
 if verbose == 1
 	fprintf('Computing the correct position match...\n');
