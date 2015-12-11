@@ -11,6 +11,7 @@ num_folders = length(folder_list);
 name = 'result.txt';
 
 total_num = 0;
+total_num_all = 0;
 for i = 1 : num_folders
 		folder_name = strcat(folder_path, folder_list(i).name);
 		if strcmp(folder_name(end), '.') || strcmp(folder_name(end-1:end), '..')
@@ -41,7 +42,7 @@ for i = 1 : num_folders
 
 				[total_matched, correct_1, correct_2, sift_matched, f1, f2] = sift_match_fix_orientation(gI1, gI2);
 				
-				fprintf(outID, '%s %s ', name_1, name_2);
+				fprintf(outID, '%s %s ', pair_name{j,1}, pair_name{j,2});
 				fprintf(outID, '%4d %4d %.2f %4d %4d ', size(total_matched,2), size(correct_1,2), size(correct_1,2)/size(total_matched,2), size(correct_2, 2), size(sift_matched, 2));	
 
 				if size(correct_1, 2)/size(total_matched, 2) < 0.25
@@ -50,6 +51,8 @@ for i = 1 : num_folders
 				else
 						fprintf(outID, '0\n');
 				end
+
+				total_num_all = total_num_all + size(total_matched, 2);
 		end
 		
 		fclose(outID);
@@ -57,4 +60,3 @@ for i = 1 : num_folders
 		ccc = 0;
 
 end
-

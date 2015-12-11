@@ -3,7 +3,7 @@ function pair_list = load_files(folder_name)
 
 pair_list = {};
 count = 1;
-file_names = dir(strcat(folder_name, '*.jpg'));
+file_names = dir(strcat(folder_name, '/*.jpg'));
 
 num_files = length(file_names);
 
