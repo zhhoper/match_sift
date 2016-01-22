@@ -52,11 +52,12 @@ fprintf('Number of correct matched feature under threshold is %d\n', size(correc
 
 
 % draw match for top 5 matches
-xa = tf1(1, total_matched(1,:));
-xb = tf2(1, total_matched(2,:)) + size(I1, 2);
+num_show = 1; 
+xa = tf1(1, total_matched(1,1:num_show));
+xb = tf2(1, total_matched(2,1:num_show)) + size(I1, 2);
 
-ya = tf1(2, total_matched(1,:));
-yb = tf2(2, total_matched(2,:));
+ya = tf1(2, total_matched(1,1:num_show));
+yb = tf2(2, total_matched(2,1:num_show));
 
 imshow(cat(2, I1, I2), []);
 hold on;
