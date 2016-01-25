@@ -3,9 +3,11 @@ function getPatch_matchnet()
 
 % add vl_feat to path
 run('~/lib/vlfeat-0.9.20/toolbox/vl_setup');
+%run(vl_path);
 
 % add the folder containing the images
 folder_path = '../Data/Selected_Images_DayNight/';
+
 folder_list = dir(folder_path);
 
 num_folders = length(folder_list);
@@ -21,7 +23,7 @@ for i = 1 : num_folders
 		% load testing pair images
 		pair_name = load_day_night(folder_name);
 		%save_folder = fullfile(folder_name, 'matchnet');
-		save_folder = fullfile(folder_path, 'matchnet_new', folder_list(i).name);
+		save_folder = fullfile(folder_path, 'matchnet_scale', folder_list(i).name);
 		if ~exist(save_folder, 'file')
 				mkdir(save_folder);
 		end
@@ -118,9 +120,17 @@ end
 function patch = getPatch(index, f, img)
 % This function is used to find the patch according to the index
 patch = zeros(64,64);
-[row, col] = size(img);
-x = round(f(1, index));
-y = round(f(2, index));
+%[row, col] = size(img);
+%x = round(f(1, index));
+%y = round(f(2, index));
+
+% we need to consider about the scale.
+scale = f(3, index);
+tmp_img = imresize(img, 1/scale);
+[row, col] = size(tmp_img);
+
+x = round(f(1, index)/scale);
+y = round(f(2, index)/scale);
 
 xx1 = max(x-32, 1);
 xx2 = min(x+31, col);
@@ -133,6 +143,6 @@ indx2 = 64 - max(x+31-col, 0);
 indy1 = max(33-y, 0) + 1;
 indy2 = 64 - max(y+31-row, 0);
 
-patch(indy1:indy2, indx1:indx2) = img(yy1:yy2, xx1:xx2);
+patch(indy1:indy2, indx1:indx2) = tmp_img(yy1:yy2, xx1:xx2);
 end
 
